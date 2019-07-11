@@ -1,0 +1,18 @@
+{
+    "name": "continuoustraining/php-unit-training",
+    "description": "PHPUnit training",
+    "type": "project",
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "daniel",
+            "email": "daniel.leivas@continuous.team"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "ContinuousUnit\\": "src/"
+        }
+    },
+    "require": {}
+}
