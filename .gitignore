@@ -7,3 +7,4 @@
 .settings
 vendor
 composer.phar
+tests/reports
