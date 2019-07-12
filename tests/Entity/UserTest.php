@@ -62,13 +62,22 @@ class UserTest extends TestCase
 
         $this->assertEquals($temporaryAvatar, $user->getTemporaryAvatar());
     }
-    
+
     public function testTemporaryAvatarSetterActuallySetTemporaryAvatarProperty()
     {
         $user = new User();
         $temporaryAvatar = '/tmp/toto.jpg';
         $this->assertSame($user, $user->setTemporaryAvatar($temporaryAvatar));
         $this->assertAttributeEquals($temporaryAvatar, 'temporaryAvatar', $user);
+    }
+
+    public function testPasswordSuccessfullySet()
+    {
+        $user = new User();
+        $password = 'nightwatch';
+        $result = $user->setPassword($password);
+
+        $this->assertTrue($result);
     }
 
     protected function setProperty($object, $property, $value)

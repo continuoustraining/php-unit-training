@@ -4,6 +4,8 @@ namespace ContinuousUnit\Entity;
 
 class User
 {
+   const MIN_PASS_LENGTH = 4;
+
     protected $id;
 
     protected $firstname;
@@ -11,6 +13,8 @@ class User
     protected $lastname;
 
     protected $temporaryAvatar;
+
+    private $password;
 
     public function getId()
     {
@@ -48,5 +52,21 @@ class User
     {
         $this->temporaryAvatar = $temporaryAvatar;
         return $this;
+    }
+
+    public function setPassword($password)
+    {
+        if (strlen($password) < self::MIN_PASS_LENGTH) {
+            return false;
+        }
+
+        $this->password = $this->cryptPassword($password);
+
+        return true;
+    }
+
+    private function cryptPassword($password)
+    {
+        return md5($password); // Hashing is not encryption! It's just ... hashing.
     }
 }
