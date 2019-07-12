@@ -1,6 +1,6 @@
 <?php
 
-namespace ContinuousUnitTest;
+namespace ContinuousUnitTest\Validator;
 
 use ContinuousUnit\Validator\EmailAddress;
 use PHPUnit\Framework\TestCase;
