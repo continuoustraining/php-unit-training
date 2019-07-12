@@ -7,48 +7,24 @@ use PHPUnit\Framework\TestCase;
 
 class EmailAddressTest extends TestCase
 {
-    public function testCheckValidEmailAddress()
+   public function getFixtures()
     {
-        $address = 'toto@example.com';
-
-        $validator = new EmailAddress();
-
-        $this->assertEquals(true, $validator->isValid($address));
+        return [
+            ['toto@example.com', true],
+            ['toto@toto@example.com', false],
+            ['toto', false],
+            ['to#$to@examaple.com', true],
+            ['töto@exämple.com', true],
+        ];
     }
 
-    public function testCheckEmailAddressWithMutlipleAtSign()
+    /**
+     * @dataProvider getFixtures()
+     */
+    public function testAddress($address, $isValid)
     {
-        $address = 'toto@toto@example.com';
-
         $validator = new EmailAddress();
 
-        $this->assertEquals(false, $validator->isValid($address));
-    }
-
-    public function testCheckEmailAddressWithoutDomainName()
-    {
-        $address = 'toto';
-
-        $validator = new EmailAddress();
-
-        $this->assertEquals(false, $validator->isValid($address));
-    }
-
-    public function testCheckEmailAddressContainingSpecialCharacters()
-    {
-        $address = 'to#$to@examaple.com';
-
-        $validator = new EmailAddress();
-
-        $this->assertEquals(true, $validator->isValid($address));
-    }
-
-    public function testCheckEmailAddressWithNonEnglishCharacters()
-    {
-        $address = 'töto@exämple.com';
-
-        $validator = new EmailAddress();
-
-        $this->assertEquals(true, $validator->isValid($address));
+        $this->assertEquals($isValid, $validator->isValid($address));
     }
 }
