@@ -12,6 +12,9 @@ RUN docker-php-ext-install pdo_mysql zip
 RUN pecl install xdebug \
     && docker-php-ext-enable xdebug
 
+RUN pecl install redis \
+    && docker-php-ext-enable redis
+
 # enable rewriting url
 RUN a2enmod rewrite
 

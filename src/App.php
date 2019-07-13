@@ -2,8 +2,14 @@
 
 namespace ContinuousUnit;
 
+use ContinuousUnit\Gateway\UserGatewayFactory;
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
+
+use ContinuousUnit\Entity\User;
+use ContinuousUnit\Gateway\RedisFactory;
+use ContinuousUnit\Hydrator\UserHydratorFactory;
+use ContinuousUnit\Service\UserServiceFactory;
 
 class App
 {
@@ -11,7 +17,8 @@ class App
 
     public function __construct()
     {
-        $app = new \Slim\App;
+        $app = new \Slim\App($this->getSettings());
+        $app = $this->setDependencies($app);
 
         $app->get('/', function (Request $request, Response $response) {
             $response->getBody()->write("Hello, Unit testers");
@@ -24,7 +31,17 @@ class App
             });
 
             $this->get('/{id}', function (Request $request, Response $response, $args) {
-                return $response->withJson(['message' => "User ".$args['id']]);
+                $result = $this->userHydrator->extract(
+                    $this->userService->findOne($args['id'])
+                );
+                return $response->withStatus(200)->withJson($result);
+            });
+
+            $this->map(['POST', 'PUT'], '/{id}', function (Request $request, Response $response, $args) {
+                $data = json_decode($request->getBody()->getContents(), true);
+                $user = $this->userHydrator->hydrate($data, new User());
+                $result = $this->userHydrator->extract($this->userService->addUser($user));
+                return $response->withStatus(201)->withJson($result);
             });
         });
 
@@ -34,5 +51,28 @@ class App
     public function get()
     {
         return $this->app; // get an instance of Slim App
+    }
+
+    public function getSettings()
+    {
+        return [
+            'settings' => [
+                'displayErrorDetails' => true,
+            ],
+            'redisConfig' => [
+                'host' => 'redis'
+            ]
+        ];
+    }
+
+    public function setDependencies($app)
+    {
+        $container = $app->getContainer();
+        $container['redis'] = new RedisFactory();
+        $container['userGateway'] = new UserGatewayFactory();
+        $container['userHydrator'] = new UserHydratorFactory();
+        $container['userService'] = new UserServiceFactory();
+
+        return $app;
     }
 }
