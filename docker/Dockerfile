@@ -12,6 +12,9 @@ RUN docker-php-ext-install pdo_mysql zip
 RUN pecl install xdebug \
     && docker-php-ext-enable xdebug
 
+# enable rewriting url
+RUN a2enmod rewrite
+
 # Install composer
 RUN curl -sSk https://getcomposer.org/installer | php -- --disable-tls && \
        mv composer.phar /usr/local/bin/composer
