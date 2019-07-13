@@ -4,7 +4,7 @@ namespace ContinuousUnit\Entity;
 
 class User
 {
-   const MIN_PASS_LENGTH = 4;
+    const MIN_PASS_LENGTH = 4;
 
     protected $id;
 

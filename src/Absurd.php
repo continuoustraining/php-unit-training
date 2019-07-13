@@ -4,5 +4,5 @@ namespace ContinuousUnit;
 
 class Absurd
 {
-   //
+    //
 }
