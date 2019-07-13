@@ -80,6 +80,15 @@ class UserTest extends TestCase
         $this->assertTrue($result);
     }
 
+    public function testPasswordLengthIsTooShort()
+    {
+        $user = new User();
+        $password = 'got';
+        $result = $user->setPassword($password);
+
+        $this->assertFalse($result);
+    }
+
     protected function setProperty($object, $property, $value)
     {
         $reflection = new \ReflectionObject($object);
