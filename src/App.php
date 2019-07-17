@@ -39,6 +39,8 @@ class App
 
             $this->map(['POST', 'PUT'], '/{id}', function (Request $request, Response $response, $args) {
                 $data = json_decode($request->getBody()->getContents(), true);
+                $data['id'] = $args['id'];
+
                 $user = $this->userHydrator->hydrate($data, new User());
                 $result = $this->userHydrator->extract($this->userService->addUser($user));
                 return $response->withStatus(201)->withJson($result);

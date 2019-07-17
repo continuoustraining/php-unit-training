@@ -1,13 +1,13 @@
 <?php
 namespace ContinuousUnit\UnitTest\Service;
 
-use GeneratedHydrator\Configuration;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 use ContinuousUnit\Entity\User;
 use ContinuousUnit\Gateway\UserGateway;
 use ContinuousUnit\Service\UserService;
+use Zend\Hydrator\Reflection;
 
 class UserServiceTest extends TestCase
 {
@@ -21,9 +21,7 @@ class UserServiceTest extends TestCase
     {
         $this->userGateway = $this->createMock(UserGateway::class);
 
-        $config = new Configuration(User::class);
-        $hydratorClass = $config->createFactory()->getHydratorClass();
-        $userHydrator = new $hydratorClass();
+        $userHydrator = new Reflection();
 
         $this->userService = new UserService(
             $this->userGateway,
@@ -31,7 +29,7 @@ class UserServiceTest extends TestCase
         );
     }
 
-    public function testAddUserReturnsUserWhenItSaves()
+    public function testAddUserActuallyReturnsUserWhenItSaves()
     {
         $user = new User();
         $user->setFirstname('rick');
